@@ -1,15 +1,21 @@
 package vn.gqhao.jobhunter.controller;
 
+import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.gqhao.jobhunter.domain.Company;
+import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.gqhao.jobhunter.service.CompanyService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +28,11 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompany(){
-        return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleFetchAllCompany());
+    public ResponseEntity<ResultPaginationDTO> getAllCompany(
+            @Filter Specification<Company> spec,
+            Pageable pageable
+            ){
+        return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleFetchAllCompany(spec, pageable));
     }
 
     @PutMapping("/companies")

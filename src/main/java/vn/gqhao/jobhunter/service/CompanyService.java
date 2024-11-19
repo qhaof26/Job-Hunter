@@ -2,12 +2,16 @@ package vn.gqhao.jobhunter.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Company;
+import vn.gqhao.jobhunter.domain.dto.Meta;
+import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +23,21 @@ public class CompanyService {
         return this.companyRepository.save(company);
     }
 
-    public List<Company> handleFetchAllCompany(){
-        return this.companyRepository.findAll();
+    public ResultPaginationDTO handleFetchAllCompany(Specification<Company> spec, Pageable pageable){
+        Page<Company> pageCompany = this.companyRepository.findAll(spec, pageable);
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        Meta mt = new Meta();
+
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+
+        mt.setPages(pageCompany.getTotalPages());
+        mt.setTotal(pageCompany.getTotalElements());
+
+        rs.setMeta(mt);
+        rs.setResult(pageCompany);
+
+        return rs;
     }
 
     public Company handleGetCompany(long id){
