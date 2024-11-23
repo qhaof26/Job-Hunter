@@ -19,7 +19,9 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class CompanyController {
+
     private final CompanyService companyService;
 
     @PostMapping("/companies")

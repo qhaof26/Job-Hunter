@@ -1,10 +1,11 @@
 package vn.gqhao.jobhunter.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -12,35 +13,48 @@ import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.domain.dto.Meta;
 import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.gqhao.jobhunter.domain.dto.user.UserCreateResDTO;
+import vn.gqhao.jobhunter.domain.dto.user.UserResDTO;
+import vn.gqhao.jobhunter.domain.dto.user.UserUpdateResDTO;
 import vn.gqhao.jobhunter.repository.UserRepository;
+import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
+import vn.gqhao.jobhunter.util.mapper.UserMapper;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Transactional
+    public UserCreateResDTO handleCreateUser(User user) {
+        if(this.userRepository.existsUserByEmail(user.getEmail())){
+            throw new RuntimeException("Add fail !");
+        }
+        this.userRepository.save(user);
+        return userMapper.UserToUserCreateResDTO(user);
     }
 
-    public User handleCreateUser(User user) {
-        return this.userRepository.save(user);
-    }
-
+    @Transactional
     public void handleDeleteUser(long id) {
         this.userRepository.deleteById(id);
     }
 
     public User fetchUserById(long id) {
-        Optional<User> userOptional = this.userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
-        return null;
+        return this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found !"));
     }
 
     public ResultPaginationDTO fetchAllUser(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+
+        // Map data from user to userResDTO
+        List<User> listUser = pageUser.getContent();
+        List<UserResDTO> userResDTOList = new ArrayList<>();
+        for(User user : listUser){
+            userResDTOList.add(this.userMapper.UserToUserResDTO(user));
+        }
+
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta meta = new Meta();
 
@@ -51,23 +65,38 @@ public class UserService {
         meta.setTotal(pageUser.getTotalElements()); //Tổng số bản ghi
 
         rs.setMeta(meta);
-        rs.setResult(pageUser.getContent());
+        rs.setResult(userResDTOList);
         return rs;
     }
 
-    public User handleUpdateUser(User reqUser) {
+    @Transactional
+    public UserUpdateResDTO handleUpdateUser(User reqUser) {
         User currentUser = this.fetchUserById(reqUser.getId());
         if (currentUser != null) {
-            currentUser.setEmail(reqUser.getEmail());
             currentUser.setName(reqUser.getName());
-            currentUser.setPassword(reqUser.getPassword());
+            currentUser.setGender(reqUser.getGender());
+            currentUser.setAge(reqUser.getAge());
+            currentUser.setAddress(reqUser.getAddress());
             // update
             currentUser = this.userRepository.save(currentUser);
         }
-        return currentUser;
+        return userMapper.UserToUserUpdateResDTO(currentUser);
     }
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    @Transactional
+    public void updateUserToken(String token, String email){
+        User currentUser = this.handleGetUserByUsername(email);
+        if(currentUser != null){
+            currentUser.setRefreshToken(token);
+            this.userRepository.save(currentUser);
+        }
+    }
+
+    public User getUserByRefreshTokenAndEmail(String token, String email) {
+        return this.userRepository.findByRefreshTokenAndEmail(token, email);
     }
 }

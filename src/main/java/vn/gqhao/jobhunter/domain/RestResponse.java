@@ -1,11 +1,16 @@
 package vn.gqhao.jobhunter.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class RestResponse<T> {
     private int statusCode;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String error;
 
     // message có thể là string, hoặc arrayList
     private Object message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public int getStatusCode() {

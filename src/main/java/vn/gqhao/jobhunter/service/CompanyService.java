@@ -10,6 +10,7 @@ import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.dto.Meta;
 import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
+import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CompanyService {
     }
 
     public Company handleGetCompany(long id){
-        return this.companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Data not found"));
+        return this.companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company not found !"));
     }
 
     @Transactional
