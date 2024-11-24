@@ -4,18 +4,14 @@ import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.gqhao.jobhunter.domain.Company;
-import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.service.CompanyService;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

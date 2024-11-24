@@ -2,9 +2,9 @@ package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.dto.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
 
 @Component
 public class UserMapper {

@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
 import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;
 import vn.gqhao.jobhunter.util.error.IdInvalidException;

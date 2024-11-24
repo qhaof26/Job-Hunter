@@ -11,11 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.dto.Meta;
-import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.dto.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
+import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
 import vn.gqhao.jobhunter.util.mapper.UserMapper;
@@ -56,8 +55,7 @@ public class UserService {
         }
 
         ResultPaginationDTO rs = new ResultPaginationDTO();
-        Meta meta = new Meta();
-
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
         meta.setPage(pageable.getPageNumber() + 1); //Đang ở trang nào ?
         meta.setPageSize(pageable.getPageSize());   //Kích thước / 1 trang
 

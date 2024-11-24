@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.domain.dto.user;
+package vn.gqhao.jobhunter.domain.response.user;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,7 +14,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateResDTO {
+public class UserResDTO {
     private long id;
     private String name;
     private String email;
@@ -23,5 +23,5 @@ public class UserCreateResDTO {
     private GenderEnum gender;
     private String address;
     private Instant createdAt;
-    private String createdBy;
+    private Instant updatedAt;
 }

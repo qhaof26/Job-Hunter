@@ -7,12 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Company;
-import vn.gqhao.jobhunter.domain.dto.Meta;
-import vn.gqhao.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +24,8 @@ public class CompanyService {
     public ResultPaginationDTO handleFetchAllCompany(Specification<Company> spec, Pageable pageable){
         Page<Company> pageCompany = this.companyRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
-        Meta mt = new Meta();
 
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
 

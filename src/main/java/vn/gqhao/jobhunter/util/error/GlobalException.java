@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import vn.gqhao.jobhunter.domain.RestResponse;
+import vn.gqhao.jobhunter.domain.response.RestResponse;
 
 @RestControllerAdvice
 public class GlobalException {

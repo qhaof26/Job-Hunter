@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.service;
+package vn.gqhao.jobhunter.config;
 
 import java.util.Collections;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.error.IdInvalidException;
 
 @Component("userDetailsService")

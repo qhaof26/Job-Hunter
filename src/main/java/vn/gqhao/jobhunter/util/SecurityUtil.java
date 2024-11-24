@@ -24,7 +24,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.util.Base64;
-import vn.gqhao.jobhunter.domain.dto.ResLoginDTO;
+import vn.gqhao.jobhunter.domain.response.user.ResLoginDTO;
 
 @Service
 public class SecurityUtil {
@@ -79,7 +79,7 @@ public class SecurityUtil {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", dto.getUserLogin())
+                .claim("user", dto.getUser())
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
