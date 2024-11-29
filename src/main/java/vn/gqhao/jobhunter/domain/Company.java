@@ -1,6 +1,7 @@
 package vn.gqhao.jobhunter.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import vn.gqhao.jobhunter.util.SecurityUtil;
 
 import java.time.Instant;
+import java.util.List;
 
 @Table(name = "companies")
 @Entity
@@ -18,7 +20,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "name không được để trống")
+    @NotBlank(message = "Name is required not null !")
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -37,18 +39,23 @@ public class Company {
 
     private String updatedBy;
 
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<User> users;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Job> jobs;
+
     @PrePersist
     public void handleBeforeCreate(){
-        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
-                        ? SecurityUtil.getCurrentUserLogin().get()
-                        : " ";
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : " ";
         this.createdAt = Instant.now();
     }
 
     @PreUpdate
     public void handleBeforeUpdate(){
         this.updatedAt = Instant.now();
-        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
-                        ? SecurityUtil.getCurrentUserLogin().get() : " ";
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : " ";
     }
 }

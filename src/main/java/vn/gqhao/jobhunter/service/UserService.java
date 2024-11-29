@@ -10,11 +10,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.dto.request.UserCreationRequest;
+import vn.gqhao.jobhunter.dto.request.UserUpdateRequest;
+import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
+import vn.gqhao.jobhunter.dto.response.UserResponse;
+import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
+import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
 import vn.gqhao.jobhunter.util.mapper.UserMapper;
@@ -24,20 +28,28 @@ import vn.gqhao.jobhunter.util.mapper.UserMapper;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
     private final UserMapper userMapper;
 
     @Transactional
-    public UserCreateResDTO handleCreateUser(User user) {
-        if(this.userRepository.existsUserByEmail(user.getEmail())){
+    public UserCreationResponse handleCreateUser(UserCreationRequest reqUser) {
+        if(this.userRepository.existsUserByEmail(reqUser.getEmail())){
             throw new RuntimeException("Add fail !");
         }
+        Company company = this.companyRepository.findById(reqUser.getCompanyId()).isPresent()
+                ? companyRepository.getCompanyById(reqUser.getCompanyId()) : null;
+
+        User user = User.builder()
+                .name(reqUser.getName())
+                .email(reqUser.getEmail())
+                .password(reqUser.getPassword())
+                .age(reqUser.getAge())
+                .gender(reqUser.getGender())
+                .address(reqUser.getAddress())
+                .company(company)
+                .build();
         this.userRepository.save(user);
         return userMapper.UserToUserCreateResDTO(user);
-    }
-
-    @Transactional
-    public void handleDeleteUser(long id) {
-        this.userRepository.deleteById(id);
     }
 
     public User fetchUserById(long id) {
@@ -49,7 +61,7 @@ public class UserService {
 
         // Map data from user to userResDTO
         List<User> listUser = pageUser.getContent();
-        List<UserResDTO> userResDTOList = new ArrayList<>();
+        List<UserResponse> userResDTOList = new ArrayList<>();
         for(User user : listUser){
             userResDTOList.add(this.userMapper.UserToUserResDTO(user));
         }
@@ -68,13 +80,17 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResDTO handleUpdateUser(User reqUser) {
+    public UserUpdateResponse handleUpdateUser(UserUpdateRequest reqUser) {
         User currentUser = this.fetchUserById(reqUser.getId());
+        Company company = this.companyRepository.findById(reqUser.getCompanyId()).isPresent()
+                ? companyRepository.getCompanyById(reqUser.getCompanyId()) : null;
+
         if (currentUser != null) {
             currentUser.setName(reqUser.getName());
             currentUser.setGender(reqUser.getGender());
             currentUser.setAge(reqUser.getAge());
             currentUser.setAddress(reqUser.getAddress());
+            currentUser.setCompany(company);
             // update
             currentUser = this.userRepository.save(currentUser);
         }
@@ -83,6 +99,11 @@ public class UserService {
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    @Transactional
+    public void handleDeleteUser(long id) {
+        this.userRepository.deleteById(id);
     }
 
     @Transactional

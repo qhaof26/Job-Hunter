@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import vn.gqhao.jobhunter.domain.response.RestResponse;
+import vn.gqhao.jobhunter.dto.response.RestResponse;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -73,5 +73,15 @@ public class GlobalException {
         res.setError(ex.getMessage());
         res.setMessage("Data not found !");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<RestResponse<Object>> handlingAppException(AppException exception){
+        RestResponse<Object> res = new RestResponse<Object>();
+        ErrorCode errorCode = exception.getErrorCode();
+        res.setStatusCode(errorCode.getCode());
+        //res.setError("Error !");
+        res.setMessage(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatusCode()).body(res);
     }
 }

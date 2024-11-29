@@ -10,10 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.response.ResultPaginationDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.dto.request.UserCreationRequest;
+import vn.gqhao.jobhunter.dto.request.UserUpdateRequest;
+import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
+import vn.gqhao.jobhunter.dto.response.UserResponse;
+import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
 import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;
 import vn.gqhao.jobhunter.util.error.IdInvalidException;
@@ -30,10 +32,10 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiMessage("Create user")
-    public ResponseEntity<UserCreateResDTO> createNewUser(@RequestBody User postManUser) {
+    public ResponseEntity<UserCreationResponse> createNewUser(@RequestBody UserCreationRequest postManUser) {
         String hashPassword = this.passwordEncoder.encode(postManUser.getPassword());
         postManUser.setPassword(hashPassword);
-        UserCreateResDTO user = this.userService.handleCreateUser(postManUser);
+        UserCreationResponse user = this.userService.handleCreateUser(postManUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
@@ -49,15 +51,12 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    // fetch user by id
     @GetMapping("/users/{id}")
     @ApiMessage("Get user by id")
-    public ResponseEntity<UserResDTO> getUserById(@PathVariable("id") long id) {
-
+    public ResponseEntity<UserResponse> getUserById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userMapper.UserToUserResDTO(this.userService.fetchUserById(id)));
     }
 
-    // fetch all users
     @GetMapping("/users")
     @ApiMessage("Fetch all users")
     public ResponseEntity<ResultPaginationDTO> getAllUser(
@@ -68,8 +67,9 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserUpdateResDTO> updateUser(@RequestBody User user) {
-        UserUpdateResDTO userUpdate = this.userService.handleUpdateUser(user);
+    @ApiMessage("Update user")
+    public ResponseEntity<UserUpdateResponse> updateUser(@RequestBody UserUpdateRequest user) {
+        UserUpdateResponse userUpdate = this.userService.handleUpdateUser(user);
         return ResponseEntity.ok(userUpdate);
     }
 

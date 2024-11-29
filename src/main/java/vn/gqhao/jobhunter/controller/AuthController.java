@@ -13,9 +13,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import vn.gqhao.jobhunter.domain.request.ReqLoginDTO;
+import vn.gqhao.jobhunter.dto.request.UserLoginRequest;
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.response.user.ResLoginDTO;
+import vn.gqhao.jobhunter.dto.response.UserLoginResponse;
 import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.SecurityUtil;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;
@@ -35,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     @ApiMessage("Login user")
-    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody ReqLoginDTO loginDto) {
+    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest loginDto) {
         // Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword());
@@ -46,10 +46,10 @@ public class AuthController {
         // Create a token
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ResLoginDTO res = new ResLoginDTO();
+        UserLoginResponse res = new UserLoginResponse();
         User user = this.userService.handleGetUserByUsername(loginDto.getUsername());
         if(user != null){
-            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+            UserLoginResponse.UserLogin userLogin = new UserLoginResponse.UserLogin(
                     user.getId(),
                     user.getEmail(),
                     user.getName()
@@ -79,11 +79,11 @@ public class AuthController {
 
     @GetMapping("/auth/account")
     @ApiMessage("Fetch account")
-    public ResponseEntity<ResLoginDTO.UserGetAccount> getAccount(){
+    public ResponseEntity<UserLoginResponse.UserGetAccount> getAccount(){
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User currentUser = this.userService.handleGetUserByUsername(email);
-        ResLoginDTO.UserLogin resUser = new ResLoginDTO.UserLogin();
-        ResLoginDTO.UserGetAccount userAccount = new ResLoginDTO.UserGetAccount();
+        UserLoginResponse.UserLogin resUser = new UserLoginResponse.UserLogin();
+        UserLoginResponse.UserGetAccount userAccount = new UserLoginResponse.UserGetAccount();
         if(currentUser != null){
             resUser.setId(currentUser.getId());
             resUser.setEmail(currentUser.getEmail());
@@ -95,7 +95,7 @@ public class AuthController {
 
     @GetMapping("/auth/refresh")
     @ApiMessage("Get User by refresh token")
-    public ResponseEntity<ResLoginDTO> getRefreshToken(
+    public ResponseEntity<UserLoginResponse> getRefreshToken(
             @CookieValue(name = "refresh_token", defaultValue = "abc") String refresh_token) throws IdInvalidException {
         if (refresh_token.equals("abc")) {
             throw new IdInvalidException("Bạn không có refresh token ở cookie");
@@ -111,10 +111,10 @@ public class AuthController {
         }
 
         // issue new token/set refresh token as cookies
-        ResLoginDTO res = new ResLoginDTO();
+        UserLoginResponse res = new UserLoginResponse();
         User currentUserDB = this.userService.handleGetUserByUsername(email);
         if (currentUserDB != null) {
-            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+            UserLoginResponse.UserLogin userLogin = new UserLoginResponse.UserLogin(
                     currentUserDB.getId(),
                     currentUserDB.getEmail(),
                     currentUserDB.getName());

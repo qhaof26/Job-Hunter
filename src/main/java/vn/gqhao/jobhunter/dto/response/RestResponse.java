@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.domain.response;
+package vn.gqhao.jobhunter.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

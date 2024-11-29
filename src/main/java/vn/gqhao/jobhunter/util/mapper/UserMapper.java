@@ -2,14 +2,16 @@ package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
 import vn.gqhao.jobhunter.domain.User;
-import vn.gqhao.jobhunter.domain.response.user.UserCreateResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserResDTO;
-import vn.gqhao.jobhunter.domain.response.user.UserUpdateResDTO;
+import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
+import vn.gqhao.jobhunter.dto.response.UserResponse;
+import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
 
 @Component
 public class UserMapper {
-    public UserCreateResDTO UserToUserCreateResDTO(User user){
-        return new UserCreateResDTO(
+
+    // User -> ResCreateUserDTO: phản hồi khi tạo mới
+    public UserCreationResponse UserToUserCreateResDTO(User user){
+        return new UserCreationResponse(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -20,27 +22,47 @@ public class UserMapper {
                 user.getCreatedBy()
         );
     }
-    public UserUpdateResDTO UserToUserUpdateResDTO(User user){
-        return new UserUpdateResDTO(
-                user.getId(),
-                user.getName(),
-                user.getAge(),
-                user.getGender(),
-                user.getAddress(),
-                user.getUpdatedAt(),
-                user.getUpdatedBy()
-        );
+
+    // User -> UserUpdateResDTO: phản hồi khi update
+    public UserUpdateResponse UserToUserUpdateResDTO(User user){
+        UserUpdateResponse.Company company = new UserUpdateResponse.Company();
+        if(user.getCompany() != null){
+            company.setIdCompany(user.getCompany().getId());
+            company.setNameCompany(user.getCompany().getName());
+        } else{
+            company = null;
+        }
+        return UserUpdateResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .age(user.getAge())
+                .address(user.getAddress())
+                .gender(user.getGender())
+                .updatedBy(user.getUpdatedBy())
+                .updatedAt(user.getUpdatedAt())
+                .company(company)
+                .build();
     }
-    public UserResDTO UserToUserResDTO(User user){
-        return new UserResDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getAge(),
-                user.getGender(),
-                user.getAddress(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
+
+    // User -> UserResDTO: phản hồi khi tìm kiếm
+    public UserResponse UserToUserResDTO(User user){
+        UserResponse.Company company = new UserResponse.Company();
+        if(user.getCompany() != null){
+            company.setIdCompany(user.getCompany().getId());
+            company.setNameCompany(user.getCompany().getName());
+        } else{
+            company = null;
+        }
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .age(user.getAge())
+                .address(user.getAddress())
+                .gender(user.getGender())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .company(company)
+                .build();
     }
 }
