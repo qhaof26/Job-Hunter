@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import vn.gqhao.jobhunter.service.UserService;
-import vn.gqhao.jobhunter.util.error.IdInvalidException;
 
 @Component("userDetailsService")
 public class UserDetailsCustom implements UserDetailsService {

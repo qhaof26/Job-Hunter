@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.util.error;
+package vn.gqhao.jobhunter.exception;
 
 public class IdInvalidException extends Exception {
     // Constructor that accepts a message

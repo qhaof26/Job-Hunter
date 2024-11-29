@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.util.error;
+package vn.gqhao.jobhunter.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

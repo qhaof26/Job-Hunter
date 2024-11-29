@@ -19,7 +19,7 @@ import vn.gqhao.jobhunter.dto.response.UserLoginResponse;
 import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.SecurityUtil;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;
-import vn.gqhao.jobhunter.util.error.IdInvalidException;
+import vn.gqhao.jobhunter.exception.IdInvalidException;
 
 @RestController
 @RequiredArgsConstructor

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Skill;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.repository.SkillRepository;
-import vn.gqhao.jobhunter.util.error.AppException;
-import vn.gqhao.jobhunter.util.error.ErrorCode;
+import vn.gqhao.jobhunter.exception.AppException;
+import vn.gqhao.jobhunter.exception.ErrorCode;
 
 
 @Service

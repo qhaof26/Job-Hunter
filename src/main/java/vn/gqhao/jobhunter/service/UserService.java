@@ -20,7 +20,7 @@ import vn.gqhao.jobhunter.dto.response.UserResponse;
 import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
-import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
+import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
 import vn.gqhao.jobhunter.util.mapper.UserMapper;
 
 @Service

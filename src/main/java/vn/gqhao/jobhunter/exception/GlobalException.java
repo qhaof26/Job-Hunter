@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.util.error;
+package vn.gqhao.jobhunter.exception;
 
 import java.util.List;
 import java.util.stream.Collectors;

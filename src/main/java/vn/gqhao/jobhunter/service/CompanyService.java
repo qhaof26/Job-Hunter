@@ -11,7 +11,7 @@ import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
-import vn.gqhao.jobhunter.util.error.ResourceNotFoundException;
+import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
 
 import java.util.List;
 

@@ -13,8 +13,8 @@ import vn.gqhao.jobhunter.dto.request.JobUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.*;
 import vn.gqhao.jobhunter.repository.JobRepository;
 import vn.gqhao.jobhunter.repository.SkillRepository;
-import vn.gqhao.jobhunter.util.error.AppException;
-import vn.gqhao.jobhunter.util.error.ErrorCode;
+import vn.gqhao.jobhunter.exception.AppException;
+import vn.gqhao.jobhunter.exception.ErrorCode;
 import vn.gqhao.jobhunter.util.mapper.JobMapper;
 
 import java.util.ArrayList;
