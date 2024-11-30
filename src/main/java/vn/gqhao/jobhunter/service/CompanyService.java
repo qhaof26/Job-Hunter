@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.exception.ErrorCode;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
@@ -44,7 +45,7 @@ public class CompanyService {
     }
 
     public Company handleGetCompany(long id){
-        return this.companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company not found !"));
+        return this.companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.COMPANY_NOT_EXISTED.getMessage()));
     }
 
     @Transactional

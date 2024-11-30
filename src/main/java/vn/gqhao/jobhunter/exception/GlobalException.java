@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.gqhao.jobhunter.dto.response.RestResponse;
 
@@ -46,7 +47,6 @@ public class GlobalException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
-
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<RestResponse<Object>> dataNotFound(NoResourceFoundException ex){
         RestResponse<Object> res = new RestResponse<Object>();
@@ -55,13 +55,20 @@ public class GlobalException {
         res.setMessage("Url not found !");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<RestResponse<Object>> dataNotFound(MethodArgumentTypeMismatchException ex){
         RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(ex.getMessage());
         res.setMessage("Invalid data !");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<RestResponse<Object>> dataNotFound(MissingServletRequestPartException ex){
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        res.setError(ex.getMessage());
+        res.setMessage("Missing input parameters !");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 

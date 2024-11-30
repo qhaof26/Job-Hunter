@@ -18,6 +18,8 @@ import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
 import vn.gqhao.jobhunter.dto.response.UserResponse;
 import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
+import vn.gqhao.jobhunter.exception.AppException;
+import vn.gqhao.jobhunter.exception.ErrorCode;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
@@ -34,7 +36,7 @@ public class UserService {
     @Transactional
     public UserCreationResponse handleCreateUser(UserCreationRequest reqUser) {
         if(this.userRepository.existsUserByEmail(reqUser.getEmail())){
-            throw new RuntimeException("Add fail !");
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         Company company = this.companyRepository.findById(reqUser.getCompanyId()).isPresent()
                 ? companyRepository.getCompanyById(reqUser.getCompanyId()) : null;
@@ -53,7 +55,7 @@ public class UserService {
     }
 
     public User fetchUserById(long id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found !"));
+        return this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_EXISTED.getMessage()));
     }
 
     public ResultPaginationDTO fetchAllUser(Specification<User> spec, Pageable pageable) {
