@@ -2,6 +2,7 @@ package vn.gqhao.jobhunter.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,10 @@ public class JobController {
     @ApiMessage("Fetch all jobs")
     public ResponseEntity<ResultPaginationDTO> getAllJobs(
             @Filter Specification<Job> spec,
-            Pageable pageable){
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+            ){
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK).body(jobService.fetchAllJobs(spec, pageable));
     }
 
@@ -44,7 +48,7 @@ public class JobController {
 
     @PutMapping("/jobs")
     @ApiMessage("Update job")
-    public ResponseEntity<JobUpdateResponse> createNewJob(@RequestBody JobUpdateRequest request) {
+    public ResponseEntity<JobUpdateResponse> updateJob(@RequestBody JobUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.updateJob(request));
     }
 

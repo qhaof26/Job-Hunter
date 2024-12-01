@@ -4,6 +4,7 @@ import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -25,11 +26,19 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.companyService.handleCreateCompany(reqCompany));
     }
 
+    @GetMapping("/companies/{id}")
+    public ResponseEntity<Company> getCompanyById(@PathVariable long id){
+        Company company = companyService.handleGetCompany(id);
+        return ResponseEntity.status(HttpStatus.OK).body(company);
+    }
+
     @GetMapping("/companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompany(
             @Filter Specification<Company> spec,
-            Pageable pageable
+            @RequestParam(value = "page", required = false, defaultValue ="1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
             ){
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleFetchAllCompany(spec, pageable));
     }
 

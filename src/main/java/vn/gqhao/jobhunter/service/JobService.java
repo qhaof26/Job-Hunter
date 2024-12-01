@@ -1,7 +1,9 @@
 package vn.gqhao.jobhunter.service;
 
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,6 +13,7 @@ import vn.gqhao.jobhunter.domain.Skill;
 import vn.gqhao.jobhunter.dto.request.JobCreationRequest;
 import vn.gqhao.jobhunter.dto.request.JobUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.*;
+import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.JobRepository;
 import vn.gqhao.jobhunter.repository.SkillRepository;
 import vn.gqhao.jobhunter.exception.AppException;
@@ -23,10 +26,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobService {
-    private final JobRepository jobRepository;
-    private final SkillRepository skillRepository;
-    private final JobMapper jobMapper;
+    JobRepository jobRepository;
+    SkillRepository skillRepository;
+    JobMapper jobMapper;
+    CompanyRepository companyRepository;
 
     public Job fetchJobById(long id){
         return jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.JOB_NOT_EXISTED));
@@ -64,6 +69,9 @@ public class JobService {
         if(skills.isEmpty()){
             throw new AppException(ErrorCode.SKILL_NOT_EXISTED);
         }
+        if(companyRepository.getCompanyById(request.getCompany().getId()) == null){
+            throw new AppException(ErrorCode.COMPANY_NOT_EXISTED);
+        }
 
         Job job = jobMapper.JobCreationRequestToJob(request);
         job.setSkills(skills);
@@ -81,6 +89,10 @@ public class JobService {
         if(skills.isEmpty()){
             throw new AppException(ErrorCode.SKILL_NOT_EXISTED);
         }
+        if(companyRepository.getCompanyById(request.getCompany().getId()) == null){
+            throw new AppException(ErrorCode.COMPANY_NOT_EXISTED);
+        }
+
         jobMapper.JobUpdateRequestToJob(request, job);
         job.setSkills(skills);
         jobRepository.save(job);

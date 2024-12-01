@@ -1,16 +1,20 @@
 package vn.gqhao.jobhunter.service;
 
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Company;
+import vn.gqhao.jobhunter.domain.Job;
 import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.exception.ErrorCode;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
+import vn.gqhao.jobhunter.repository.JobRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
 
@@ -18,9 +22,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CompanyService {
-    private final CompanyRepository companyRepository;
-    private final UserRepository userRepository;
+    CompanyRepository companyRepository;
+    UserRepository userRepository;
+    JobRepository jobRepository;
 
     @Transactional
     public Company handleCreateCompany(Company company){
@@ -66,6 +72,12 @@ public class CompanyService {
             user.setCompany(null);
             this.userRepository.save(user);
         }
+//        List<Job> jobs = company.getJobs();
+//        company.setJobs(null);
+//        for(Job item : jobs) {
+//            jobRepository.delete(item);
+//        }
+
         this.companyRepository.delete(company);
     }
 }

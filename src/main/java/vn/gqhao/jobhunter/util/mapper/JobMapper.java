@@ -24,6 +24,7 @@ public class JobMapper {
                 .quantity(request.getQuantity())
                 .levelEnum(request.getLevelEnum())
                 .description(request.getDescription())
+                .company(request.getCompany())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .active(request.isActive())
@@ -37,6 +38,7 @@ public class JobMapper {
         job.setQuantity(request.getQuantity());
         job.setLevelEnum(request.getLevelEnum());
         job.setDescription(request.getDescription());
+        job.setCompany(request.getCompany());
         job.setStartDate(request.getStartDate());
         job.setEndDate(request.getEndDate());
         job.setActive(request.isActive());

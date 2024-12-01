@@ -3,6 +3,7 @@ package vn.gqhao.jobhunter.dto.request;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
+import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.Skill;
 import vn.gqhao.jobhunter.util.constant.LevelEnum;
 
@@ -25,5 +26,6 @@ public class JobCreationRequest {
     private Instant startDate;
     private Instant endDate;
     private boolean active;
+    public Company company;
     private List<Skill> skills;
 }
