@@ -14,7 +14,11 @@ public enum ErrorCode {
     SKILL_EXISTED(400, "Skill existed", HttpStatus.BAD_REQUEST),
     RESUME_NOT_EXISTED(400, "Resume not existed", HttpStatus.NOT_FOUND),
     FILE_UPLOAD_INVALID(400, "File upload must be in the correct format", HttpStatus.BAD_REQUEST),
-    FILE_UPLOAD_NOT_EXISTED(400, "File upload not existed", HttpStatus.BAD_REQUEST)
+    FILE_UPLOAD_NOT_EXISTED(400, "File upload not existed", HttpStatus.BAD_REQUEST),
+    PERMISSION_NOT_EXISTED(400, "Permission not existed", HttpStatus.NOT_FOUND),
+    PERMISSION_EXISTED(400, "Permission existed", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EXISTED(400, "Role not existed", HttpStatus.NOT_FOUND),
+    ROLE_EXISTED(400, "Role existed", HttpStatus.BAD_REQUEST)
     ;
 
     private int code;
