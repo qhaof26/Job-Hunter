@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.gqhao.jobhunter.domain.Role;
 
 @Getter
 @Setter
@@ -21,6 +22,7 @@ public class UserLoginResponse {
         private long id;
         private String email;
         private String name;
+        private Role role;
     }
 
     @Getter
@@ -31,4 +33,13 @@ public class UserLoginResponse {
         private UserLogin user;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInsideToken{
+        private long id;
+        private String email;
+        private String name;
+    }
 }

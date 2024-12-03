@@ -28,7 +28,7 @@ public class SkillController {
             @RequestParam(value = "size", required = false, defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return ResponseEntity.status(HttpStatus.OK).body(this.skillService.handleFetchAllSkill(spec, pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(this.skillService.handleFetchAllSkills(spec, pageable));
     }
 
     @GetMapping("/skills/{id}")

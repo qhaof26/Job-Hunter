@@ -18,7 +18,7 @@ import vn.gqhao.jobhunter.exception.ErrorCode;
 public class SkillService {
     private final SkillRepository skillRepository;
 
-    public ResultPaginationDTO handleFetchAllSkill(Specification<Skill> spec, Pageable pageable){
+    public ResultPaginationDTO handleFetchAllSkills(Specification<Skill> spec, Pageable pageable){
         Page<Skill> pageSkill = this.skillRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
 

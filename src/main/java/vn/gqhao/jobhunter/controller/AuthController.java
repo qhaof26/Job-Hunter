@@ -52,11 +52,12 @@ public class AuthController {
             UserLoginResponse.UserLogin userLogin = new UserLoginResponse.UserLogin(
                     user.getId(),
                     user.getEmail(),
-                    user.getName()
+                    user.getName(),
+                    user.getRole()
             );
             res.setUser(userLogin);
         }
-        String access_token = this.securityUtil.createAccessToken(authentication.getName(), res.getUser());
+        String access_token = this.securityUtil.createAccessToken(authentication.getName(), res);
         res.setAccessToken(access_token);
 
         // Update token when logging in
@@ -88,6 +89,7 @@ public class AuthController {
             resUser.setId(currentUser.getId());
             resUser.setEmail(currentUser.getEmail());
             resUser.setName(currentUser.getName());
+            resUser.setRole(currentUser.getRole());
             userAccount.setUser(resUser);
         }
         return ResponseEntity.ok().body(userAccount);
@@ -117,12 +119,13 @@ public class AuthController {
             UserLoginResponse.UserLogin userLogin = new UserLoginResponse.UserLogin(
                     currentUserDB.getId(),
                     currentUserDB.getEmail(),
-                    currentUserDB.getName());
+                    currentUserDB.getName(),
+                    currentUserDB.getRole());
             res.setUser(userLogin);
         }
 
         // create access token
-        String access_token = this.securityUtil.createAccessToken(email, res.getUser());
+        String access_token = this.securityUtil.createAccessToken(email, res);
         res.setAccessToken(access_token);
 
         // create refresh token

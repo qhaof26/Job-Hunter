@@ -8,9 +8,8 @@ import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;
 
 @Component
 public class UserMapper {
-
     // User -> ResCreateUserDTO: phản hồi khi tạo mới
-    public UserCreationResponse UserToUserCreateResDTO(User user){
+    public UserCreationResponse UserToUserCreationResponse(User user){
         return new UserCreationResponse(
                 user.getId(),
                 user.getName(),
@@ -24,7 +23,7 @@ public class UserMapper {
     }
 
     // User -> UserUpdateResDTO: phản hồi khi update
-    public UserUpdateResponse UserToUserUpdateResDTO(User user){
+    public UserUpdateResponse UserToUserUpdateResponse(User user){
         UserUpdateResponse.Company company = new UserUpdateResponse.Company();
         if(user.getCompany() != null){
             company.setIdCompany(user.getCompany().getId());
@@ -44,15 +43,24 @@ public class UserMapper {
                 .build();
     }
 
-    // User -> UserResDTO: phản hồi khi tìm kiếm
-    public UserResponse UserToUserResDTO(User user){
-        UserResponse.Company company = new UserResponse.Company();
+    // User -> UserResDTO
+    public UserResponse UserToUserResponse(User user){
+        UserResponse.Company companyUser = new UserResponse.Company();
         if(user.getCompany() != null){
-            company.setIdCompany(user.getCompany().getId());
-            company.setNameCompany(user.getCompany().getName());
+            companyUser.setIdCompany(user.getCompany().getId());
+            companyUser.setNameCompany(user.getCompany().getName());
         } else{
-            company = null;
+            companyUser = null;
         }
+
+        UserResponse.Role roleUser = new UserResponse.Role();
+        if(user.getRole() != null){
+            roleUser.setIdRole(user.getRole().getId());
+            roleUser.setName(user.getRole().getName());
+        } else{
+            roleUser = null;
+        }
+
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -62,7 +70,8 @@ public class UserMapper {
                 .gender(user.getGender())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
-                .company(company)
+                .company(companyUser)
+                .role(roleUser)
                 .build();
     }
 }

@@ -33,11 +33,11 @@ public class JobService {
     JobMapper jobMapper;
     CompanyRepository companyRepository;
 
-    public Job fetchJobById(long id){
+    public Job handleFetchJobById(long id){
         return jobRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.JOB_NOT_EXISTED));
     }
 
-    public ResultPaginationDTO fetchAllJobs(Specification<Job> spec, Pageable pageable){
+    public ResultPaginationDTO handleFetchAllJobs(Specification<Job> spec, Pageable pageable){
         Page<Job> pageJob = this.jobRepository.findAll(spec, pageable);
 
         // Map data from user to userResDTO
@@ -61,7 +61,7 @@ public class JobService {
     }
 
     @Transactional
-    public JobCreationResponse createJob(JobCreationRequest request){
+    public JobCreationResponse handleCreateJob(JobCreationRequest request){
         List<Long> listId = request.getSkills()
                 .stream().map(Skill :: getId)
                 .collect(Collectors.toList());
@@ -80,8 +80,8 @@ public class JobService {
     }
 
     @Transactional
-    public JobUpdateResponse updateJob(JobUpdateRequest request){
-        Job job = fetchJobById(request.getId());
+    public JobUpdateResponse handleUpdateJob(JobUpdateRequest request){
+        Job job = handleFetchJobById(request.getId());
         List<Long> listId = request.getSkills()
                 .stream().map(Skill :: getId)
                 .collect(Collectors.toList());
@@ -100,8 +100,8 @@ public class JobService {
     }
 
     @Transactional
-    public void deleteJob(long id){
-        Job job = fetchJobById(id);
+    public void handleDeleteJob(long id){
+        Job job = handleFetchJobById(id);
         jobRepository.delete(job);
     }
 

@@ -46,7 +46,12 @@ public class SecurityUtil {
     @Value("${gqhao.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
-    public String createAccessToken(String email, UserLoginResponse.UserLogin dto) {
+    public String createAccessToken(String email, UserLoginResponse dto) {
+        UserLoginResponse.UserInsideToken userToken = new UserLoginResponse.UserInsideToken();
+        userToken.setId(dto.getUser().getId());
+        userToken.setName(dto.getUser().getName());
+        userToken.setEmail(dto.getUser().getEmail());
+
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
@@ -61,7 +66,7 @@ public class SecurityUtil {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", dto)
+                .claim("user", userToken)
                 .claim("permission", listAuthority)
                 .build();
 
@@ -74,12 +79,17 @@ public class SecurityUtil {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
 
+        UserLoginResponse.UserInsideToken userToken = new UserLoginResponse.UserInsideToken();
+        userToken.setId(dto.getUser().getId());
+        userToken.setName(dto.getUser().getName());
+        userToken.setEmail(dto.getUser().getEmail());
+
         // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", dto.getUser())
+                .claim("user", userToken)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();

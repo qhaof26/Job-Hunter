@@ -4,6 +4,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
+import vn.gqhao.jobhunter.domain.Company;
+import vn.gqhao.jobhunter.domain.Role;
 import vn.gqhao.jobhunter.util.constant.GenderEnum;
 
 @Getter
@@ -16,5 +18,6 @@ public class UserCreationRequest {
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
     private String address;
-    private long companyId;
+    private Company company;
+    private Role role;
 }

@@ -33,11 +33,11 @@ public class RoleService {
     PermissionRepository permissionRepository;
     RoleMapper roleMapper;
 
-    public Role handlingFetchRoleById(long id){
+    public Role handleFetchRoleById(long id){
         return roleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
     }
 
-    public ResultPaginationDTO handlingFetchAllRoles(Specification<Role> spec, int page, int size){
+    public ResultPaginationDTO handleFetchAllRoles(Specification<Role> spec, int page, int size){
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Role> pageRole = roleRepository.findAll(spec, pageable);
         List<Role> listRole = pageRole.getContent();
@@ -59,7 +59,7 @@ public class RoleService {
     }
 
     @Transactional
-    public RoleResponse handlingCreateRole(RoleCreationRequest request){
+    public RoleResponse handleCreateRole(RoleCreationRequest request){
         if(roleRepository.existsByName(request.getName())){
             throw new AppException(ErrorCode.ROLE_EXISTED);
         }
@@ -78,10 +78,10 @@ public class RoleService {
     }
 
     @Transactional
-    public RoleResponse handlingUpdateRole(RoleUpdateRequest request){
-        if(roleRepository.existsByName(request.getName())){
-            throw new AppException(ErrorCode.ROLE_EXISTED);
-        }
+    public RoleResponse handleUpdateRole(RoleUpdateRequest request){
+//        if(roleRepository.existsByName(request.getName())){
+//            throw new AppException(ErrorCode.ROLE_EXISTED);
+//        }
         Role role = roleRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         List<Long> permissionsId = request.getPermissions()
                 .stream().map(Permission::getId)
@@ -97,8 +97,8 @@ public class RoleService {
     }
 
     @Transactional
-    public void handlingDeleteRole(long id){
-        Role role = handlingFetchRoleById(id);
+    public void handleDeleteRole(long id){
+        Role role = handleFetchRoleById(id);
         roleRepository.delete(role);
     }
 }

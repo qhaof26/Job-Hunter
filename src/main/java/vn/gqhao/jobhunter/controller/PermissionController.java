@@ -29,7 +29,7 @@ public class PermissionController {
     @GetMapping("/permissions/{id}")
     @ApiMessage("Fetch a permission")
     public ResponseEntity<PermissionResponse> fetchPermissionById(@PathVariable long id){
-        return ResponseEntity.status(HttpStatus.OK).body(permissionMapper.PermissionToPermissionResponse(permissionService.handlingFetchPermissionById(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(permissionMapper.PermissionToPermissionResponse(permissionService.handleFetchPermissionById(id)));
     }
 
     @GetMapping("/permissions")
@@ -39,25 +39,25 @@ public class PermissionController {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size
             ){
-        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handlingFetchAllPermission(spec, page, size));
+        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleFetchAllPermissions(spec, page, size));
     }
 
     @PostMapping("/permissions")
     @ApiMessage("Create permission")
     public ResponseEntity<PermissionResponse> createPermission(@Valid @RequestBody PermissionCreationRequest request){
-        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handlingCreatePermission(request));
+        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleCreatePermission(request));
     }
 
     @PutMapping("/permissions")
     @ApiMessage("Update permission")
     public ResponseEntity<PermissionResponse> updatePermission(@Valid @RequestBody PermissionUpdateRequest request){
-        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handlingUpdatePermission(request));
+        return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleUpdatePermission(request));
     }
 
     @DeleteMapping("/permissions/{id}")
     @ApiMessage("Delete permission")
     public ResponseEntity<String> deletePermission(@PathVariable long id){
-        permissionService.handlingDeletePermission(id);
+        permissionService.handleDeletePermission(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa thành công !");
     }
 }

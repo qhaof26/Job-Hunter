@@ -50,13 +50,13 @@ public class CompanyService {
         return rs;
     }
 
-    public Company handleGetCompany(long id){
+    public Company handleFetchCompanyById(long id){
         return this.companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.COMPANY_NOT_EXISTED.getMessage()));
     }
 
     @Transactional
     public Company handleUpdateCompany(Company companyDTO){
-        Company company = handleGetCompany(companyDTO.getId());
+        Company company = handleFetchCompanyById(companyDTO.getId());
         company.setName(company.getName());
         company.setDescription(companyDTO.getDescription());
         company.setAddress(companyDTO.getAddress());
@@ -66,7 +66,7 @@ public class CompanyService {
 
     @Transactional
     public void handleDeleteCompany(long id){
-        Company company = handleGetCompany(id);
+        Company company = handleFetchCompanyById(id);
         List<User> users = company.getUsers();
         for(User user : users){
             user.setCompany(null);

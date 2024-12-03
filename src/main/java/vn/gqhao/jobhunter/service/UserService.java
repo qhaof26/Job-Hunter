@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.gqhao.jobhunter.domain.Company;
+import vn.gqhao.jobhunter.domain.Role;
 import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.dto.request.UserCreationRequest;
 import vn.gqhao.jobhunter.dto.request.UserUpdateRequest;
@@ -27,31 +30,35 @@ import vn.gqhao.jobhunter.util.mapper.UserMapper;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
-    private final UserMapper userMapper;
+    UserRepository userRepository;
+    CompanyRepository companyRepository;
+    UserMapper userMapper;
+    RoleService roleService;
+    CompanyService companyService;
 
     @Transactional
-    public UserCreationResponse handleCreateUser(UserCreationRequest reqUser) {
-        if(this.userRepository.existsUserByEmail(reqUser.getEmail())){
+    public UserCreationResponse handlingCreateUser(UserCreationRequest request) {
+        if(this.userRepository.existsUserByEmail(request.getEmail())){
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        Company company = this.companyRepository.findById(reqUser.getCompanyId()).isPresent()
-                ? companyRepository.getCompanyById(reqUser.getCompanyId()) : null;
+        Company company = companyService.handleFetchCompanyById(request.getCompany().getId());
+        Role role = roleService.handleFetchRoleById(request.getRole().getId());
 
         User user = User.builder()
-                .name(reqUser.getName())
-                .email(reqUser.getEmail())
-                .password(reqUser.getPassword())
-                .age(reqUser.getAge())
-                .gender(reqUser.getGender())
-                .address(reqUser.getAddress())
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .age(request.getAge())
+                .gender(request.getGender())
+                .address(request.getAddress())
                 .company(company)
+                .role(role)
                 .build();
         this.userRepository.save(user);
-        return userMapper.UserToUserCreateResDTO(user);
+        return userMapper.UserToUserCreationResponse(user);
     }
 
     public User fetchUserById(long id) {
@@ -65,7 +72,7 @@ public class UserService {
         List<User> listUser = pageUser.getContent();
         List<UserResponse> userResDTOList = new ArrayList<>();
         for(User user : listUser){
-            userResDTOList.add(this.userMapper.UserToUserResDTO(user));
+            userResDTOList.add(this.userMapper.UserToUserResponse(user));
         }
 
         ResultPaginationDTO rs = new ResultPaginationDTO();
@@ -82,21 +89,21 @@ public class UserService {
     }
 
     @Transactional
-    public UserUpdateResponse handleUpdateUser(UserUpdateRequest reqUser) {
-        User currentUser = this.fetchUserById(reqUser.getId());
-        Company company = this.companyRepository.findById(reqUser.getCompanyId()).isPresent()
-                ? companyRepository.getCompanyById(reqUser.getCompanyId()) : null;
-
+    public UserUpdateResponse handleUpdateUser(UserUpdateRequest request) {
+        User currentUser = this.fetchUserById(request.getId());
+        Company company = companyService.handleFetchCompanyById(request.getCompany().getId());
+        Role role = roleService.handleFetchRoleById(request.getRole().getId());
         if (currentUser != null) {
-            currentUser.setName(reqUser.getName());
-            currentUser.setGender(reqUser.getGender());
-            currentUser.setAge(reqUser.getAge());
-            currentUser.setAddress(reqUser.getAddress());
+            currentUser.setName(request.getName());
+            currentUser.setGender(request.getGender());
+            currentUser.setAge(request.getAge());
+            currentUser.setAddress(request.getAddress());
             currentUser.setCompany(company);
+            currentUser.setRole(role);
             // update
             currentUser = this.userRepository.save(currentUser);
         }
-        return userMapper.UserToUserUpdateResDTO(currentUser);
+        return userMapper.UserToUserUpdateResponse(currentUser);
     }
 
     public User handleGetUserByUsername(String username) {

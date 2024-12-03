@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class ResumeController {
     @GetMapping("/resumes/{id}")
     @ApiMessage("Fetch resume by id")
     public ResponseEntity<ResumeResponse> getResumeById(@PathVariable long id){
-        ResumeResponse resumeResponse = resumeService.handlingFetchResumeById(id);
+        ResumeResponse resumeResponse = resumeService.handleFetchResumeById(id);
         return ResponseEntity.status(HttpStatus.OK).body(resumeResponse);
     }
 
@@ -37,25 +38,31 @@ public class ResumeController {
             @RequestParam(value = "page", required = false, defaultValue ="1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size
             ){
-        return ResponseEntity.status(HttpStatus.OK).body(resumeService.handlingFetchAllResume(spec, page, size));
+        return ResponseEntity.status(HttpStatus.OK).body(resumeService.handleFetchAllResumes(spec, page, size));
     }
 
     @PostMapping("/resumes")
     @ApiMessage("Create resume")
     public ResponseEntity<ResumeCreationResponse> createNewResume(@Valid @RequestBody ResumeCreationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.handlingCreateResume(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.handleCreateResume(request));
     }
 
-    @PutMapping("/resumes")
+    @PostMapping("/resumes/by-user")
+    @ApiMessage("Get list resumes by user")
+    public ResponseEntity<ResultPaginationDTO> getResumesByUser(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.handleFetchResumesByUser(pageable));
+    }
+
+    @PutMapping("/resumes/by-user")
     @ApiMessage("Update resume")
     public ResponseEntity<ResumeUpdateResponse> updateResume(@RequestBody ResumeUpdateRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.handlingUpdateResume(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeService.handleUpdateResume(request));
     }
 
     @DeleteMapping("/resumes/{id}")
     @ApiMessage("Delete resume")
     public ResponseEntity<String> removeResume(@PathVariable long id){
-        resumeService.handlingDeleteResume(id);
+        resumeService.handleDeleteResume(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa thành công !");
     }
 }

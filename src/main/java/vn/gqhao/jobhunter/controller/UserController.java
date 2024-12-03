@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<UserCreationResponse> createNewUser(@RequestBody UserCreationRequest postManUser) {
         String hashPassword = this.passwordEncoder.encode(postManUser.getPassword());
         postManUser.setPassword(hashPassword);
-        UserCreationResponse user = this.userService.handleCreateUser(postManUser);
+        UserCreationResponse user = this.userService.handlingCreateUser(postManUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
@@ -55,7 +55,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     @ApiMessage("Get user by id")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.userMapper.UserToUserResDTO(this.userService.fetchUserById(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(this.userMapper.UserToUserResponse(this.userService.fetchUserById(id)));
     }
 
     @GetMapping("/users")

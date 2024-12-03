@@ -24,10 +24,18 @@ public class UserResponse {
     private Instant updatedAt;
 
     private Company company;
+    private Role role;
     @Getter
     @Setter
     public static class Company{
         private long idCompany;
         private String nameCompany;
+    }
+
+    @Getter
+    @Setter
+    public static class Role{
+        private long idRole;
+        private String name;
     }
 }

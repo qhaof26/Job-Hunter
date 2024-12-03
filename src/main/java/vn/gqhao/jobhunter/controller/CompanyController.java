@@ -28,7 +28,7 @@ public class CompanyController {
 
     @GetMapping("/companies/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable long id){
-        Company company = companyService.handleGetCompany(id);
+        Company company = companyService.handleFetchCompanyById(id);
         return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 

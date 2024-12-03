@@ -29,11 +29,11 @@ public class PermissionService {
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
 
-    public Permission handlingFetchPermissionById(long id){
+    public Permission handleFetchPermissionById(long id){
         return permissionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
     }
 
-    public ResultPaginationDTO handlingFetchAllPermission(Specification<Permission> spec, int page, int size){
+    public ResultPaginationDTO handleFetchAllPermissions(Specification<Permission> spec, int page, int size){
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Permission> pagePermission = permissionRepository.findAll(spec, pageable);
         List<Permission> listPermission = pagePermission.getContent();
@@ -55,7 +55,7 @@ public class PermissionService {
     }
 
     @Transactional
-    public PermissionResponse handlingCreatePermission(PermissionCreationRequest request){
+    public PermissionResponse handleCreatePermission(PermissionCreationRequest request){
         if(permissionRepository.existsByApiPathAndMethodAndModule(request.getApiPath(), request.getMethod(), request.getModule())){
             throw new AppException(ErrorCode.PERMISSION_EXISTED);
         }
@@ -70,8 +70,8 @@ public class PermissionService {
     }
 
     @Transactional
-    public PermissionResponse handlingUpdatePermission(PermissionUpdateRequest request){
-        Permission permission = handlingFetchPermissionById(request.getId());
+    public PermissionResponse handleUpdatePermission(PermissionUpdateRequest request){
+        Permission permission = handleFetchPermissionById(request.getId());
         if(permissionRepository.existsByApiPathAndMethodAndModule(request.getApiPath(), request.getMethod(), request.getModule())){
             throw new AppException(ErrorCode.PERMISSION_EXISTED);
         }
@@ -84,8 +84,8 @@ public class PermissionService {
     }
 
     @Transactional
-    public void handlingDeletePermission(long id){
-        Permission permission = handlingFetchPermissionById(id);
+    public void handleDeletePermission(long id){
+        Permission permission = handleFetchPermissionById(id);
         permission.getRoles().forEach(role -> role.getPermissions().remove(permission));
         permissionRepository.delete(permission);
     }
