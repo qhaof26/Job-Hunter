@@ -1,27 +1,41 @@
 package vn.gqhao.jobhunter.service;
 
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Skill;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
+import vn.gqhao.jobhunter.dto.response.SkillResponse;
 import vn.gqhao.jobhunter.repository.SkillRepository;
 import vn.gqhao.jobhunter.exception.AppException;
 import vn.gqhao.jobhunter.exception.ErrorCode;
+import vn.gqhao.jobhunter.util.mapper.SkillMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SkillService {
-    private final SkillRepository skillRepository;
+    SkillRepository skillRepository;
+    SkillMapper skillMapper;
 
     public ResultPaginationDTO handleFetchAllSkills(Specification<Skill> spec, Pageable pageable){
         Page<Skill> pageSkill = this.skillRepository.findAll(spec, pageable);
-        ResultPaginationDTO rs = new ResultPaginationDTO();
+        List<Skill> skills = pageSkill.getContent();
+        List<SkillResponse> skillResponseList = new ArrayList<>();
+        for(Skill skill : skills){
+            skillResponseList.add(skillMapper.SKillToSkillResponse(skill));
+        }
 
+        ResultPaginationDTO rs = new ResultPaginationDTO();
         ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
@@ -29,7 +43,7 @@ public class SkillService {
         mt.setTotal(pageSkill.getTotalElements());
 
         rs.setMeta(mt);
-        rs.setResult(pageSkill);
+        rs.setResult(skillResponseList);
 
         return rs;
     }

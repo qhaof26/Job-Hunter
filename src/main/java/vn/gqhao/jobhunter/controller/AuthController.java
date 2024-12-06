@@ -3,6 +3,7 @@ package vn.gqhao.jobhunter.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import vn.gqhao.jobhunter.dto.request.UserLoginRequest;
 import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.dto.request.UserRegisterRequest;
+import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
 import vn.gqhao.jobhunter.dto.response.UserLoginResponse;
 import vn.gqhao.jobhunter.service.UserService;
 import vn.gqhao.jobhunter.util.SecurityUtil;
@@ -23,7 +26,7 @@ import vn.gqhao.jobhunter.exception.IdInvalidException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("${api.prefix}/auth")
 public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -33,7 +36,7 @@ public class AuthController {
     @Value("${gqhao.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     @ApiMessage("Login user")
     public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest loginDto) {
         // Nạp input gồm username/password vào Security
@@ -78,7 +81,13 @@ public class AuthController {
                 .body(res);
     }
 
-    @GetMapping("/auth/account")
+    @PostMapping("/register")
+    @ApiMessage("Register account")
+    public ResponseEntity<UserCreationResponse> registerAccount(@Valid @RequestBody UserRegisterRequest request){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.handleRegisterUser(request));
+    }
+
+    @GetMapping("/account")
     @ApiMessage("Fetch account")
     public ResponseEntity<UserLoginResponse.UserGetAccount> getAccount(){
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
@@ -95,7 +104,7 @@ public class AuthController {
         return ResponseEntity.ok().body(userAccount);
     }
 
-    @GetMapping("/auth/refresh")
+    @GetMapping("/refresh")
     @ApiMessage("Get User by refresh token")
     public ResponseEntity<UserLoginResponse> getRefreshToken(
             @CookieValue(name = "refresh_token", defaultValue = "abc") String refresh_token) throws IdInvalidException {
@@ -148,7 +157,7 @@ public class AuthController {
                 .body(res);
     }
 
-    @PostMapping("/auth/logout")
+    @PostMapping("/logout")
     @ApiMessage("Log out user")
     public ResponseEntity<Void> handleLogout(){
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";

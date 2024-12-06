@@ -1,7 +1,9 @@
 package vn.gqhao.jobhunter.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,18 +20,19 @@ import vn.gqhao.jobhunter.util.annotation.ApiMessage;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("${api.prefix}/jobs")
 public class JobController {
-    private final JobService jobService;
+    JobService jobService;
 
-    @GetMapping("/jobs/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Fetch job by id")
     public ResponseEntity<JobResponse> getJobById(@PathVariable long id){
         Job job = jobService.handleFetchJobById(id);
         return ResponseEntity.status(HttpStatus.OK).body(jobService.fetchJobResponse(job));
     }
 
-    @GetMapping("/jobs")
+    @GetMapping()
     @ApiMessage("Fetch all jobs")
     public ResponseEntity<ResultPaginationDTO> getAllJobs(
             @Filter Specification<Job> spec,
@@ -40,19 +43,19 @@ public class JobController {
         return ResponseEntity.status(HttpStatus.OK).body(jobService.handleFetchAllJobs(spec, pageable));
     }
 
-    @PostMapping("/jobs")
+    @PostMapping()
     @ApiMessage("Create job")
     public ResponseEntity<JobCreationResponse> createNewJob(@RequestBody JobCreationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.handleCreateJob(request));
     }
 
-    @PutMapping("/jobs")
+    @PutMapping()
     @ApiMessage("Update job")
     public ResponseEntity<JobUpdateResponse> handleUpdateJob(@RequestBody JobUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.jobService.handleUpdateJob(request));
     }
 
-    @DeleteMapping("/jobs/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete job")
     public ResponseEntity<String> removeJob(@PathVariable long id){
         jobService.handleDeleteJob(id);

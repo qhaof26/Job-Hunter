@@ -24,23 +24,23 @@ import vn.gqhao.jobhunter.util.mapper.UserMapper;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("${api.prefix}/users")
 public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-    @PostMapping("/users")
+    @PostMapping()
     @ApiMessage("Create user")
     public ResponseEntity<UserCreationResponse> createNewUser(@RequestBody UserCreationRequest postManUser) {
         String hashPassword = this.passwordEncoder.encode(postManUser.getPassword());
         postManUser.setPassword(hashPassword);
-        UserCreationResponse user = this.userService.handlingCreateUser(postManUser);
+        UserCreationResponse user = this.userService.handleCreateUser(postManUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete user")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") long id)
             throws IdInvalidException {
@@ -52,13 +52,13 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Get user by id")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userMapper.UserToUserResponse(this.userService.fetchUserById(id)));
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     @ApiMessage("Fetch all users")
     public ResponseEntity<ResultPaginationDTO> getAllUser(
             @Filter Specification<User> spec,
@@ -69,7 +69,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllUser(spec, pageable));
     }
 
-    @PutMapping("/users")
+    @PutMapping()
     @ApiMessage("Update user")
     public ResponseEntity<UserUpdateResponse> updateUser(@RequestBody UserUpdateRequest user) {
         UserUpdateResponse userUpdate = this.userService.handleUpdateUser(user);

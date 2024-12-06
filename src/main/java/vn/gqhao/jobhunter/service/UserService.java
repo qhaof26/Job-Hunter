@@ -10,12 +10,14 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.Role;
 import vn.gqhao.jobhunter.domain.User;
 import vn.gqhao.jobhunter.dto.request.UserCreationRequest;
+import vn.gqhao.jobhunter.dto.request.UserRegisterRequest;
 import vn.gqhao.jobhunter.dto.request.UserUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
@@ -34,13 +36,13 @@ import vn.gqhao.jobhunter.util.mapper.UserMapper;
 public class UserService {
 
     UserRepository userRepository;
-    CompanyRepository companyRepository;
     UserMapper userMapper;
     RoleService roleService;
     CompanyService companyService;
+    PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserCreationResponse handlingCreateUser(UserCreationRequest request) {
+    public UserCreationResponse handleCreateUser(UserCreationRequest request) {
         if(this.userRepository.existsUserByEmail(request.getEmail())){
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
@@ -61,6 +63,24 @@ public class UserService {
         return userMapper.UserToUserCreationResponse(user);
     }
 
+    @Transactional
+    public UserCreationResponse handleRegisterUser(UserRegisterRequest request) {
+        if(this.userRepository.existsUserByEmail(request.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        String hashPassword = this.passwordEncoder.encode(request.getPassword());
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(hashPassword)
+                .age(request.getAge())
+                .gender(request.getGender())
+                .address(request.getAddress())
+                .build();
+        this.userRepository.save(user);
+        return userMapper.UserToUserCreationResponse(user);
+    }
+    
     public User fetchUserById(long id) {
         return this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_EXISTED.getMessage()));
     }

@@ -2,7 +2,9 @@ package vn.gqhao.jobhunter.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,11 +18,12 @@ import vn.gqhao.jobhunter.util.annotation.ApiMessage;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("${api.prefix}/skills")
 public class SkillController {
-    private final SkillService skillService;
+    SkillService skillService;
 
-    @GetMapping("/skills")
+    @GetMapping()
     @ApiMessage("Fetch all skills")
     public ResponseEntity<ResultPaginationDTO> getAllSkill(
             @Filter Specification<Skill> spec,
@@ -31,25 +34,25 @@ public class SkillController {
         return ResponseEntity.status(HttpStatus.OK).body(this.skillService.handleFetchAllSkills(spec, pageable));
     }
 
-    @GetMapping("/skills/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Fetch skill by id")
     public ResponseEntity<Skill> getSkillById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.skillService.handleFetchSkillById(id));
     }
 
-    @PostMapping("/skills")
+    @PostMapping()
     @ApiMessage("Create skill")
     public ResponseEntity<Skill> createNewSkill(@RequestBody Skill skill) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.skillService.handleCreateSkill(skill));
     }
 
-    @PutMapping("/skills")
+    @PutMapping()
     @ApiMessage("Update skill")
     public ResponseEntity<?> updateSkill(@Valid @RequestBody Skill skill){
         return ResponseEntity.status(HttpStatus.OK).body(this.skillService.handleUpdateSkill(skill));
     }
 
-    @DeleteMapping("/skills/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Remove skill")
     public ResponseEntity<String> removeSkill(@PathVariable long id){
         skillService.handleRemoveSkill(id);

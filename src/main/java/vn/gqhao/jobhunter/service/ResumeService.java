@@ -1,6 +1,7 @@
 package vn.gqhao.jobhunter.service;
 
 import com.turkraft.springfilter.boot.Filter;
+import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
 import com.turkraft.springfilter.parser.FilterParser;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.Job;
 import vn.gqhao.jobhunter.domain.Resume;
 import vn.gqhao.jobhunter.domain.User;
@@ -32,6 +34,7 @@ import vn.gqhao.jobhunter.util.mapper.ResumeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,13 +49,17 @@ public class ResumeService {
     private FilterParser filterParser;
 
     @Autowired
+    private FilterBuilder filterBuilder;
+
+
+    @Autowired
     private FilterSpecificationConverter filterSpecificationConverter;
 
     public ResumeResponse handleFetchResumeById(long id){
         Resume resume = resumeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RESUME_NOT_EXISTED));
         return resumeMapper.ResumeToResumeResponse(resume);
     }
-//handleFetchResumesByUser
+
     public ResultPaginationDTO handleFetchResumesByUser(Pageable pageable){
         //query builder
         String email = SecurityUtil.getCurrentUserLogin().isPresent()
@@ -77,8 +84,25 @@ public class ResumeService {
 
 
     public ResultPaginationDTO handleFetchAllResumes(Specification<Resume> spec, int page, int size){
+        //handle custom specification resume by job
+        List<Long> arrJobIds = null;
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get() : "";
+        User currentUser = userService.handleGetUserByUsername(email);
+        if(currentUser != null){
+            Company company = currentUser.getCompany();
+            if(company != null){
+                List<Job> jobs = company.getJobs();
+                arrJobIds = jobs.stream().map(Job::getId)
+                        .collect(Collectors.toList());
+            }
+        }
+        Specification<Resume> jobInSpec = filterSpecificationConverter.convert(filterBuilder.field("job").in(filterBuilder.input(arrJobIds)).get());
+        Specification<Resume> finalSpec = jobInSpec.and(spec);
+
+        //handle fetch resume
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Resume> pageResume = resumeRepository.findAll(spec, pageable);
+        Page<Resume> pageResume = resumeRepository.findAll(finalSpec, pageable);
         List<Resume> listResume = pageResume.getContent();
         List<ResumeResponse> resumeResponseList = new ArrayList<>();
         for(Resume resume : listResume){

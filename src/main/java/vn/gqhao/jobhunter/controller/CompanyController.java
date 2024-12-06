@@ -3,7 +3,9 @@ package vn.gqhao.jobhunter.controller;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,23 +18,24 @@ import vn.gqhao.jobhunter.service.CompanyService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("${api.prefix}/companies")
 public class CompanyController {
 
-    private final CompanyService companyService;
+    CompanyService companyService;
 
-    @PostMapping("/companies")
+    @PostMapping()
     public ResponseEntity<?> createCompany(@Valid @RequestBody Company reqCompany){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.companyService.handleCreateCompany(reqCompany));
     }
 
-    @GetMapping("/companies/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable long id){
         Company company = companyService.handleFetchCompanyById(id);
         return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 
-    @GetMapping("/companies")
+    @GetMapping()
     public ResponseEntity<ResultPaginationDTO> getAllCompany(
             @Filter Specification<Company> spec,
             @RequestParam(value = "page", required = false, defaultValue ="1") int page,
@@ -42,7 +45,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleFetchAllCompany(spec, pageable));
     }
 
-    @PutMapping("/companies")
+    @PutMapping()
     public ResponseEntity<?> updateCompany(@Valid @RequestBody Company reqCompany){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(this.companyService.handleUpdateCompany(reqCompany));
@@ -51,7 +54,7 @@ public class CompanyController {
         }
     }
 
-    @DeleteMapping("/companies/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompany(@Min(value = 0) @PathVariable long id){
         this.companyService.handleDeleteCompany(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa thành công");

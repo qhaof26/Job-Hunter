@@ -21,6 +21,13 @@ public class Permission extends AbstractEntity<Long>{
     String method;
     String module;
 
+    public Permission(String name, String apiPath, String method, String module){
+        this.name = name;
+        this.apiPath = apiPath;
+        this.method = method;
+        this.module = module;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissions")
     @JsonIgnore
     private List<Role> roles;

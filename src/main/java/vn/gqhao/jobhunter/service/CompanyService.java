@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 import vn.gqhao.jobhunter.domain.Company;
 import vn.gqhao.jobhunter.domain.Job;
 import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.dto.response.CompanyResponse;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.exception.ErrorCode;
 import vn.gqhao.jobhunter.repository.CompanyRepository;
 import vn.gqhao.jobhunter.repository.JobRepository;
 import vn.gqhao.jobhunter.repository.UserRepository;
 import vn.gqhao.jobhunter.exception.ResourceNotFoundException;
+import vn.gqhao.jobhunter.util.mapper.CompanyMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +29,7 @@ import java.util.List;
 public class CompanyService {
     CompanyRepository companyRepository;
     UserRepository userRepository;
-    JobRepository jobRepository;
+    CompanyMapper companyMapper;
 
     @Transactional
     public Company handleCreateCompany(Company company){
@@ -35,8 +38,13 @@ public class CompanyService {
 
     public ResultPaginationDTO handleFetchAllCompany(Specification<Company> spec, Pageable pageable){
         Page<Company> pageCompany = this.companyRepository.findAll(spec, pageable);
-        ResultPaginationDTO rs = new ResultPaginationDTO();
+        List<Company> companies = pageCompany.getContent();
+        List<CompanyResponse> companyResponseList = new ArrayList<>();
+        for(Company company : companies){
+            companyResponseList.add(companyMapper.CompanyToCompanyResponse(company));
+        }
 
+        ResultPaginationDTO rs = new ResultPaginationDTO();
         ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
@@ -45,7 +53,7 @@ public class CompanyService {
         mt.setTotal(pageCompany.getTotalElements());
 
         rs.setMeta(mt);
-        rs.setResult(pageCompany);
+        rs.setResult(companyResponseList);
 
         return rs;
     }

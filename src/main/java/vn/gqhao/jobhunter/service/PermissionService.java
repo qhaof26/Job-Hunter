@@ -75,6 +75,9 @@ public class PermissionService {
         if(permissionRepository.existsByApiPathAndMethodAndModule(request.getApiPath(), request.getMethod(), request.getModule())){
             throw new AppException(ErrorCode.PERMISSION_EXISTED);
         }
+        if(request.getName().equals(permission.getName())){{
+            throw new AppException(ErrorCode.PERMISSION_EXISTED);
+        }}
         permission.setName(request.getName());
         permission.setApiPath(request.getApiPath());
         permission.setMethod(request.getMethod());

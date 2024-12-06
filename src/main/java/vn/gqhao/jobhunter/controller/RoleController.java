@@ -20,20 +20,20 @@ import vn.gqhao.jobhunter.util.mapper.RoleMapper;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("${api.prefix}/roles")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleController {
     RoleService roleService;
     RoleMapper roleMapper;
 
-    @GetMapping("/roles/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Fetch a role")
     public ResponseEntity<RoleResponse> fetchRoleById(@PathVariable long id){
         Role role = roleService.handleFetchRoleById(id);
         return ResponseEntity.status(HttpStatus.OK).body(roleMapper.RoleToRoleResponse(role));
     }
 
-    @GetMapping("/roles")
+    @GetMapping()
     @ApiMessage("Fetch all roles")
     public ResponseEntity<ResultPaginationDTO> fetchAllRoles(
             @Filter Specification<Role> spec,
@@ -43,19 +43,19 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.handleFetchAllRoles(spec, page, size));
     }
 
-    @PostMapping("/roles")
+    @PostMapping()
     @ApiMessage("Create role")
     public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleCreationRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(roleService.handleCreateRole(request));
     }
 
-    @PutMapping("/roles")
+    @PutMapping()
     @ApiMessage("Update role")
     public ResponseEntity<RoleResponse> updateRole(@Valid @RequestBody RoleUpdateRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(roleService.handleUpdateRole(request));
     }
 
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete role")
     public ResponseEntity<String> deleteRole(@PathVariable long id){
         roleService.handleDeleteRole(id);

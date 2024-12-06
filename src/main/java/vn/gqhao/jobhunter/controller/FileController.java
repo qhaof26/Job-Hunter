@@ -25,13 +25,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("${api.prefix}/files")
 public class FileController {
     private final FileService fileService;
     @Value("${gqhao.upload-file.base-uri}")
     private String baseURI;
 
-    @PostMapping("/files")
+    @PostMapping()
     @ApiMessage("Upload single file")
     public ResponseEntity<FileUploadResponse> upload(
             @RequestParam(name = "file") MultipartFile file,
@@ -50,7 +50,7 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(fileUploadResponse);
     }
 
-    @GetMapping("files")
+    @GetMapping()
     @ApiMessage("Download single file")
     public ResponseEntity<Resource> download(
             @RequestParam("fileName") String fileName,

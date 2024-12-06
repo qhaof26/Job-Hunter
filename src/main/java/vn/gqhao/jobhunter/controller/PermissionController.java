@@ -20,19 +20,19 @@ import vn.gqhao.jobhunter.util.mapper.PermissionMapper;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("${api.prefix}/permissions")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PermissionController {
     PermissionService permissionService;
     PermissionMapper permissionMapper;
 
-    @GetMapping("/permissions/{id}")
+    @GetMapping("/{id}")
     @ApiMessage("Fetch a permission")
     public ResponseEntity<PermissionResponse> fetchPermissionById(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.OK).body(permissionMapper.PermissionToPermissionResponse(permissionService.handleFetchPermissionById(id)));
     }
 
-    @GetMapping("/permissions")
+    @GetMapping()
     @ApiMessage("Fetch all permissions")
     public ResponseEntity<ResultPaginationDTO> fetchAllPermissions(
             @Filter Specification<Permission> spec,
@@ -42,19 +42,19 @@ public class PermissionController {
         return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleFetchAllPermissions(spec, page, size));
     }
 
-    @PostMapping("/permissions")
+    @PostMapping()
     @ApiMessage("Create permission")
     public ResponseEntity<PermissionResponse> createPermission(@Valid @RequestBody PermissionCreationRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleCreatePermission(request));
     }
 
-    @PutMapping("/permissions")
+    @PutMapping()
     @ApiMessage("Update permission")
     public ResponseEntity<PermissionResponse> updatePermission(@Valid @RequestBody PermissionUpdateRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(permissionService.handleUpdatePermission(request));
     }
 
-    @DeleteMapping("/permissions/{id}")
+    @DeleteMapping("/{id}")
     @ApiMessage("Delete permission")
     public ResponseEntity<String> deletePermission(@PathVariable long id){
         permissionService.handleDeletePermission(id);
