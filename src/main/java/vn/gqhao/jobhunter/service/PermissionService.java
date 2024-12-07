@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import vn.gqhao.jobhunter.domain.Permission;
+import vn.gqhao.jobhunter.entity.Permission;
 import vn.gqhao.jobhunter.dto.request.PermissionCreationRequest;
 import vn.gqhao.jobhunter.dto.request.PermissionUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.PermissionResponse;

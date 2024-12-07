@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.gqhao.jobhunter.domain.Role;
+import vn.gqhao.jobhunter.entity.Role;
 
 @Getter
 @Setter

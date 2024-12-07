@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import vn.gqhao.jobhunter.dto.request.UserLoginRequest;
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.User;
 import vn.gqhao.jobhunter.dto.request.UserRegisterRequest;
 import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
 import vn.gqhao.jobhunter.dto.response.UserLoginResponse;

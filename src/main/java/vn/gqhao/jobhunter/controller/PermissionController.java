@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.gqhao.jobhunter.domain.Permission;
+import vn.gqhao.jobhunter.entity.Permission;
 import vn.gqhao.jobhunter.dto.request.PermissionCreationRequest;
 import vn.gqhao.jobhunter.dto.request.PermissionUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.PermissionResponse;

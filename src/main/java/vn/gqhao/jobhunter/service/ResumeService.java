@@ -1,6 +1,5 @@
 package vn.gqhao.jobhunter.service;
 
-import com.turkraft.springfilter.boot.Filter;
 import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
@@ -16,10 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import vn.gqhao.jobhunter.domain.Company;
-import vn.gqhao.jobhunter.domain.Job;
-import vn.gqhao.jobhunter.domain.Resume;
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.Company;
+import vn.gqhao.jobhunter.entity.Job;
+import vn.gqhao.jobhunter.entity.Resume;
+import vn.gqhao.jobhunter.entity.User;
 import vn.gqhao.jobhunter.dto.request.ResumeCreationRequest;
 import vn.gqhao.jobhunter.dto.request.ResumeUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;

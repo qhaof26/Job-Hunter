@@ -1,4 +1,4 @@
-package vn.gqhao.jobhunter.domain;
+package vn.gqhao.jobhunter.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

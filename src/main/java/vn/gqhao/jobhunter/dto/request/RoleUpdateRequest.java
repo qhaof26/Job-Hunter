@@ -1,7 +1,7 @@
 package vn.gqhao.jobhunter.dto.request;
 
 import lombok.*;
-import vn.gqhao.jobhunter.domain.Permission;
+import vn.gqhao.jobhunter.entity.Permission;
 
 import java.util.List;
 

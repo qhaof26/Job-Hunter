@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.User;
 import vn.gqhao.jobhunter.dto.request.UserCreationRequest;
 import vn.gqhao.jobhunter.dto.request.UserUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;

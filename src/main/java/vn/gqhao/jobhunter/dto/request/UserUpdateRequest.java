@@ -4,8 +4,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
-import vn.gqhao.jobhunter.domain.Company;
-import vn.gqhao.jobhunter.domain.Role;
+import vn.gqhao.jobhunter.entity.Company;
+import vn.gqhao.jobhunter.entity.Role;
 import vn.gqhao.jobhunter.util.constant.GenderEnum;
 
 @Getter

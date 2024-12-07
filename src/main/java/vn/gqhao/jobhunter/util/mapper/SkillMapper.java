@@ -1,7 +1,7 @@
 package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
-import vn.gqhao.jobhunter.domain.Skill;
+import vn.gqhao.jobhunter.entity.Skill;
 import vn.gqhao.jobhunter.dto.response.SkillResponse;
 
 @Component

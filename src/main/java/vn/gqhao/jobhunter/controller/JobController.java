@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.gqhao.jobhunter.domain.Job;
+import vn.gqhao.jobhunter.entity.Job;
 
 import vn.gqhao.jobhunter.dto.request.JobCreationRequest;
 import vn.gqhao.jobhunter.dto.request.JobUpdateRequest;

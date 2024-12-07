@@ -5,8 +5,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import vn.gqhao.jobhunter.domain.Job;
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.Job;
+import vn.gqhao.jobhunter.entity.User;
 import vn.gqhao.jobhunter.util.constant.ResumeStateEnum;
 
 @Getter

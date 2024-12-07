@@ -1,8 +1,8 @@
 package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
-import vn.gqhao.jobhunter.domain.Permission;
-import vn.gqhao.jobhunter.domain.Role;
+import vn.gqhao.jobhunter.entity.Permission;
+import vn.gqhao.jobhunter.entity.Role;
 import vn.gqhao.jobhunter.dto.request.RoleCreationRequest;
 import vn.gqhao.jobhunter.dto.request.RoleUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.RoleResponse;

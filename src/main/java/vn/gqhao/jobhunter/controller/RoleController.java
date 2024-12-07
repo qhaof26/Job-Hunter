@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.gqhao.jobhunter.domain.Role;
+import vn.gqhao.jobhunter.entity.Role;
 import vn.gqhao.jobhunter.dto.request.RoleCreationRequest;
 import vn.gqhao.jobhunter.dto.request.RoleUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;

@@ -1,7 +1,7 @@
 package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
-import vn.gqhao.jobhunter.domain.Permission;
+import vn.gqhao.jobhunter.entity.Permission;
 import vn.gqhao.jobhunter.dto.response.PermissionResponse;
 
 @Component

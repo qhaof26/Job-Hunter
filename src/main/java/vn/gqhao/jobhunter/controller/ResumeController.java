@@ -11,20 +11,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.gqhao.jobhunter.domain.Company;
-import vn.gqhao.jobhunter.domain.Job;
-import vn.gqhao.jobhunter.domain.Resume;
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.Resume;
 import vn.gqhao.jobhunter.dto.request.ResumeCreationRequest;
 import vn.gqhao.jobhunter.dto.request.ResumeUpdateRequest;
 import vn.gqhao.jobhunter.dto.response.*;
 import vn.gqhao.jobhunter.service.ResumeService;
 import vn.gqhao.jobhunter.service.UserService;
-import vn.gqhao.jobhunter.util.SecurityUtil;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

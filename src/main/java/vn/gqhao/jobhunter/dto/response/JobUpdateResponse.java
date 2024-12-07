@@ -3,7 +3,6 @@ package vn.gqhao.jobhunter.dto.response;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
-import vn.gqhao.jobhunter.domain.Skill;
 import vn.gqhao.jobhunter.util.constant.LevelEnum;
 
 import java.time.Instant;

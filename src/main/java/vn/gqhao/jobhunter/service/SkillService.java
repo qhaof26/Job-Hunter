@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import vn.gqhao.jobhunter.domain.Skill;
+import vn.gqhao.jobhunter.entity.Skill;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.dto.response.SkillResponse;
 import vn.gqhao.jobhunter.repository.SkillRepository;

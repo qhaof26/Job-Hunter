@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.gqhao.jobhunter.domain.Skill;
+import vn.gqhao.jobhunter.entity.Skill;
 import vn.gqhao.jobhunter.dto.response.ResultPaginationDTO;
 import vn.gqhao.jobhunter.service.SkillService;
 import vn.gqhao.jobhunter.util.annotation.ApiMessage;

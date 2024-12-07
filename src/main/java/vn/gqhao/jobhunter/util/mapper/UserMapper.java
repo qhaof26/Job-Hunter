@@ -1,7 +1,7 @@
 package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
-import vn.gqhao.jobhunter.domain.User;
+import vn.gqhao.jobhunter.entity.User;
 import vn.gqhao.jobhunter.dto.response.UserCreationResponse;
 import vn.gqhao.jobhunter.dto.response.UserResponse;
 import vn.gqhao.jobhunter.dto.response.UserUpdateResponse;

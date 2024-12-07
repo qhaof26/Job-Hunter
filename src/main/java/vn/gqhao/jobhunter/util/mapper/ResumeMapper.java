@@ -1,7 +1,7 @@
 package vn.gqhao.jobhunter.util.mapper;
 
 import org.springframework.stereotype.Component;
-import vn.gqhao.jobhunter.domain.Resume;
+import vn.gqhao.jobhunter.entity.Resume;
 import vn.gqhao.jobhunter.dto.response.ResumeCreationResponse;
 import vn.gqhao.jobhunter.dto.response.ResumeResponse;
 import vn.gqhao.jobhunter.dto.response.ResumeUpdateResponse;
