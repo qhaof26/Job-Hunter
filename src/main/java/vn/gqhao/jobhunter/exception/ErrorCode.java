@@ -18,7 +18,9 @@ public enum ErrorCode {
     PERMISSION_NOT_EXISTED(400, "Permission not existed", HttpStatus.NOT_FOUND),
     PERMISSION_EXISTED(400, "Permission existed", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(400, "Role not existed", HttpStatus.NOT_FOUND),
-    ROLE_EXISTED(400, "Role existed", HttpStatus.BAD_REQUEST)
+    ROLE_EXISTED(400, "Role existed", HttpStatus.BAD_REQUEST),
+    SUBSCRIBER_EXISTED(400, "Subscriber existed", HttpStatus.BAD_REQUEST),
+    SUBSCRIBER_NOT_EXISTED(400, "Subscriber not existed", HttpStatus.NOT_FOUND)
     ;
 
     private int code;

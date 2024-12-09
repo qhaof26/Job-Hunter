@@ -17,14 +17,16 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import vn.gqhao.jobhunter.util.SecurityUtil;
 
 @Entity
 @Table(name = "subscribers")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Subscriber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
